@@ -55,14 +55,6 @@ button {
   color: transparent;
 }
 
-.certificate-paper {
-  background:
-    linear-gradient(90deg, rgba(17, 16, 13, 0.08) 1px, transparent 1px),
-    linear-gradient(rgba(17, 16, 13, 0.06) 1px, transparent 1px),
-    linear-gradient(135deg, #fffaf0, #fff1c6 55%, #f8e4a7);
-  background-size: 34px 34px, 34px 34px, 100% 100%;
-}
-
 .cap-top {
   transform: rotateX(58deg) rotateZ(-12deg);
   transform-style: preserve-3d;

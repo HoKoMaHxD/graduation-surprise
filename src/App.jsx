@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { surpriseConfig as config } from './config';
@@ -26,8 +26,8 @@ function randomFrom(items) {
 
 function App() {
   const [introDone, setIntroDone] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-  const [fortune, setFortune] = useState('');
+  const [celebrated, setCelebrated] = useState(false);
+  const [celebrationBurstId, setCelebrationBurstId] = useState(0);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIntroDone(true), 4300);
@@ -35,59 +35,30 @@ function App() {
   }, []);
 
   const celebrate = () => {
-    setAccepted(true);
+    setCelebrated(true);
+    setCelebrationBurstId((current) => current + 1);
     confetti({
-      particleCount: 180,
-      spread: 90,
+      particleCount: 150,
+      spread: 84,
       origin: { y: 0.62 },
       colors: [config.colors.gold, config.colors.blush, config.colors.mint, '#11100d', '#ffffff'],
     });
     window.setTimeout(() => {
       confetti({
-        particleCount: 90,
+        particleCount: 64,
         angle: 60,
-        spread: 70,
+        spread: 66,
         origin: { x: 0, y: 0.75 },
         colors: [config.colors.gold, config.colors.cream, config.colors.blush],
       });
       confetti({
-        particleCount: 90,
+        particleCount: 64,
         angle: 120,
-        spread: 70,
+        spread: 66,
         origin: { x: 1, y: 0.75 },
         colors: [config.colors.gold, config.colors.cream, config.colors.mint],
       });
     }, 220);
-  };
-
-  const revealFortune = () => {
-    let next = randomFrom(config.fortunes);
-    if (next === fortune && config.fortunes.length > 1) {
-      next = randomFrom(config.fortunes.filter((item) => item !== fortune));
-    }
-    setFortune(next);
-  };
-
-  const playCelebration = () => {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-
-    const audio = new AudioContext();
-    const now = audio.currentTime;
-    const notes = [523.25, 659.25, 783.99, 1046.5];
-
-    notes.forEach((frequency, index) => {
-      const osc = audio.createOscillator();
-      const gain = audio.createGain();
-      osc.type = index % 2 ? 'triangle' : 'sine';
-      osc.frequency.value = frequency;
-      gain.gain.setValueAtTime(0.0001, now + index * 0.1);
-      gain.gain.exponentialRampToValueAtTime(0.18, now + index * 0.1 + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.1 + 0.32);
-      osc.connect(gain).connect(audio.destination);
-      osc.start(now + index * 0.1);
-      osc.stop(now + index * 0.1 + 0.34);
-    });
   };
 
   return (
@@ -102,17 +73,14 @@ function App() {
         transition={{ duration: 0.8 }}
         aria-hidden={!introDone}
       >
-        <Hero onCelebrate={celebrate} />
+        <Hero />
         <PersonalMessage />
-        <CelebrationChoice onCelebrate={celebrate} />
-        <AnimatePresence>
-          {accepted && <Certificate onClose={() => setAccepted(false)} />}
-        </AnimatePresence>
-        <FinalMessage
-          fortune={fortune}
-          onRevealFortune={revealFortune}
-          onPlayCelebration={playCelebration}
+        <CelebrationChoice
+          onCelebrate={celebrate}
+          celebrated={celebrated}
+          celebrationBurstId={celebrationBurstId}
         />
+        <FinalMessage />
       </motion.div>
     </main>
   );
@@ -130,24 +98,65 @@ function IntroScreen() {
 
   return (
     <motion.section
-      className="fixed inset-0 z-50 grid place-items-center bg-ink text-parchment"
+      className="dream-bg fixed inset-0 z-50 grid place-items-center overflow-hidden px-4 text-ink"
       exit={{ opacity: 0, scale: 1.02 }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}
     >
-      <div className="relative w-full max-w-sm px-6 text-center">
-        <motion.div
-          className="mx-auto mb-8 h-20 w-20 rounded-full border border-champagne/45 bg-champagne/10 shadow-glow"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3.4, ease: 'linear', repeat: Infinity }}
-        >
-          <div className="mx-auto mt-7 h-6 w-12 rotate-[-12deg] bg-champagne shadow-lg" />
-          <div className="mx-auto h-2 w-3 rounded-full bg-parchment" />
-        </motion.div>
+      <div className="absolute left-[12%] top-[18%] h-2 w-2 rotate-45 bg-champagne shadow-glow" />
+      <div className="absolute right-[16%] top-[20%] h-3 w-3 rotate-45 bg-blush shadow-soft" />
+      <div className="absolute bottom-[20%] left-[20%] h-2.5 w-2.5 rotate-45 bg-mint shadow-soft" />
+      <div className="absolute bottom-[15%] right-[24%] h-2 w-2 rotate-45 bg-lavender shadow-soft" />
+
+      <div className="relative w-full max-w-xl text-center">
+        <p className="mb-5 text-xs font-extrabold uppercase tracking-[0.22em] text-espresso/62">
+          A little graduation note is opening
+        </p>
+
+        <div className="relative mx-auto mb-8 h-72 w-full max-w-sm">
+          <motion.div
+            className="absolute left-1/2 top-4 h-44 w-64 -translate-x-1/2 rounded-lg border border-ink/10 bg-white/82 p-5 text-left shadow-soft"
+            initial={{ y: 78, rotate: -2, opacity: 0.75 }}
+            animate={{ y: [78, 14, 18], rotate: [-2, 1, 0], opacity: 1 }}
+            transition={{ duration: 3.7, ease: 'easeInOut', repeat: Infinity, repeatDelay: 0.4 }}
+          >
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-espresso/58">
+              For {config.friendName}
+            </p>
+            <p className="mt-4 font-display text-3xl font-extrabold leading-none text-ink">
+              Class of {config.graduationYear}
+            </p>
+            <div className="mt-5 space-y-2">
+              <span className="block h-2 w-full rounded-full bg-champagne/70" />
+              <span className="block h-2 w-4/5 rounded-full bg-blush/45" />
+              <span className="block h-2 w-2/3 rounded-full bg-mint/50" />
+            </div>
+          </motion.div>
+
+          <div className="absolute bottom-8 left-1/2 h-36 w-72 -translate-x-1/2 overflow-hidden rounded-lg border border-ink/10 bg-champagne shadow-soft">
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-parchment" />
+            <div
+              className="absolute left-1/2 top-[-54px] h-40 w-40 -translate-x-1/2 rotate-45 rounded-md bg-[#f2cf69]"
+              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%)' }}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#ead096]/80" />
+            <div className="absolute bottom-8 left-1/2 h-12 w-12 -translate-x-1/2 rounded-full border-4 border-parchment bg-ink shadow-soft">
+              <span className="absolute left-1/2 top-1/2 block h-2 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-champagne" />
+            </div>
+          </div>
+
+          <motion.div
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] text-parchment shadow-soft"
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            sealed with hype
+          </motion.div>
+        </div>
 
         <AnimatePresence mode="wait">
           <motion.p
             key={lineIndex}
-            className="safe-word text-xl font-bold tracking-normal sm:text-2xl"
+            className="safe-word mx-auto min-h-16 max-w-md font-display text-3xl font-extrabold leading-tight tracking-normal text-ink sm:text-5xl"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}
@@ -156,14 +165,17 @@ function IntroScreen() {
             {config.loadingLines[lineIndex]}
           </motion.p>
         </AnimatePresence>
-        <div className="mt-8 h-1.5 overflow-hidden rounded-full bg-white/10">
+
+        <div className="mx-auto mt-7 h-2 max-w-xs overflow-hidden rounded-full bg-white/70 shadow-inner">
           <motion.div
-            className="h-full rounded-full bg-champagne"
+            className="h-full rounded-full bg-ink"
             initial={{ width: '8%' }}
             animate={{ width: '100%' }}
             transition={{ duration: 4, ease: 'easeInOut' }}
           />
         </div>
+
+        <p className="mt-4 text-sm font-bold text-espresso/62">Almost ready...</p>
       </div>
     </motion.section>
   );
@@ -198,7 +210,7 @@ function FloatingScene() {
   );
 }
 
-function Hero({ onCelebrate }) {
+function Hero() {
   return (
     <section className="relative z-10 flex min-h-screen items-center px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
@@ -256,20 +268,24 @@ function Hero({ onCelebrate }) {
 }
 
 function BalloonCluster() {
+  const balloons = [
+    { position: 'left-[10%] top-[13%]', color: 'bg-blush', size: 'h-20 w-16', delay: '0s' },
+    { position: 'right-[13%] top-[10%]', color: 'bg-mint', size: 'h-24 w-20', delay: '0.6s' },
+    { position: 'right-[23%] top-[26%]', color: 'bg-lavender', size: 'h-16 w-14', delay: '1s' },
+  ];
+
   return (
-    <div className="absolute inset-0 overflow-hidden rounded-lg" aria-hidden="true">
-      {[
-        ['left-[10%] top-[13%] bg-blush', 'h-20 w-16', '0s'],
-        ['right-[13%] top-[10%] bg-mint', 'h-24 w-20', '0.6s'],
-        ['right-[23%] top-[26%] bg-lavender', 'h-16 w-14', '1s'],
-      ].map(([position, size, delay]) => (
-        <div
-          key={position}
-          className={`absolute ${position} ${size} animate-floaty rounded-[50%] shadow-soft`}
-          style={{ animationDelay: delay }}
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg" aria-hidden="true">
+      {balloons.map((balloon, index) => (
+        <motion.div
+          key={balloon.position}
+          className={`absolute ${balloon.position} ${balloon.size} ${balloon.color} rounded-[50%] shadow-soft`}
+          animate={{ opacity: 1, scale: [1, 1.05, 1], y: [0, -10, 0] }}
+          transition={{ duration: 4.2, delay: index * 0.3, repeat: Infinity, ease: 'easeInOut' }}
         >
+          <span className="absolute left-[28%] top-[20%] h-5 w-3 rounded-full bg-white/55 blur-[1px]" />
           <span className="absolute bottom-[-38px] left-1/2 h-10 w-px -translate-x-1/2 bg-ink/20" />
-        </div>
+        </motion.div>
       ))}
     </div>
   );
@@ -329,14 +345,12 @@ function PersonalMessage() {
       <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="mb-3 text-sm font-extrabold uppercase tracking-[0.18em] text-espresso/65">
-            Five years later
+            A quick note
           </p>
-          <h2 className="font-display text-4xl font-extrabold leading-tight text-ink sm:text-6xl">
-            The funny part is how obvious this was.
-          </h2>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-espresso/78">
-            Some people hope for greatness. Some people keep showing up until it has no choice but to learn their name.
-          </p>
+          <div className="max-w-xl space-y-5 text-xl font-semibold leading-9 text-espresso/82 sm:text-2xl sm:leading-10">
+            <p>I know life changes and people get busy, but this is still a big moment.</p>
+            <p>I’m happy for you, and this is my little way of saying congratulations :)</p>
+          </div>
         </div>
 
         <motion.article
@@ -365,20 +379,28 @@ function PersonalMessage() {
   );
 }
 
-function CelebrationChoice({ onCelebrate }) {
+function CelebrationChoice({ onCelebrate, celebrated, celebrationBurstId }) {
   const stageRef = useRef(null);
-  const [position, setPosition] = useState({ x: 55, y: 118 });
+  const rejectButtonRef = useRef(null);
+  const [position, setPosition] = useState({ x: 55, y: 136 });
   const [rejectText, setRejectText] = useState(config.rejectButtonText);
 
   const moveButton = () => {
     const stage = stageRef.current;
     if (!stage) return;
+
     const bounds = stage.getBoundingClientRect();
-    const maxX = Math.max(bounds.width - 190, 8);
-    const maxY = Math.max(bounds.height - 58, 8);
+    const buttonBounds = rejectButtonRef.current?.getBoundingClientRect();
+    const buttonWidth = buttonBounds?.width ?? 210;
+    const buttonHeight = buttonBounds?.height ?? 64;
+    const safeTop = 124;
+    const padding = 10;
+    const maxX = Math.max(bounds.width - buttonWidth - padding, padding);
+    const maxY = Math.max(bounds.height - buttonHeight - padding, safeTop);
+
     setPosition({
-      x: Math.floor(Math.random() * maxX),
-      y: Math.floor(Math.random() * maxY),
+      x: Math.floor(padding + Math.random() * (maxX - padding)),
+      y: Math.floor(safeTop + Math.random() * (maxY - safeTop)),
     });
     setRejectText(randomFrom(config.runawayTexts));
   };
@@ -397,8 +419,12 @@ function CelebrationChoice({ onCelebrate }) {
 
         <div
           ref={stageRef}
-          className="relative mx-auto mt-10 h-64 max-w-2xl rounded-lg border border-ink/10 bg-white/42 shadow-soft backdrop-blur"
+          className="relative mx-auto mt-10 h-72 max-w-2xl overflow-hidden rounded-lg border border-ink/10 bg-white/42 shadow-soft backdrop-blur"
         >
+          <AnimatePresence>
+            {celebrationBurstId > 0 && <PartyBurst key={celebrationBurstId} />}
+          </AnimatePresence>
+
           <button
             type="button"
             onClick={onCelebrate}
@@ -407,126 +433,145 @@ function CelebrationChoice({ onCelebrate }) {
             {config.acceptButtonText} ✨
           </button>
 
-          <motion.button
-            type="button"
-            onPointerEnter={moveButton}
-            onPointerDown={moveButton}
-            onFocus={moveButton}
-            animate={{ x: position.x, y: position.y }}
-            transition={{ type: 'spring', stiffness: 360, damping: 24 }}
-            className="absolute left-0 top-0 min-h-12 w-[min(178px,44vw)] rounded-lg border border-ink/12 bg-white px-4 py-3 text-sm font-extrabold text-espresso shadow-soft focus:outline-none focus:ring-4 focus:ring-blush/40"
-          >
-            {rejectText} 😤
-          </motion.button>
+          <AnimatePresence>
+            {!celebrated && (
+              <motion.button
+                ref={rejectButtonRef}
+                type="button"
+                onPointerEnter={moveButton}
+                onPointerDown={moveButton}
+                onFocus={moveButton}
+                animate={{ x: position.x, y: position.y }}
+                exit={{ opacity: 0, scale: 0.8, y: position.y + 18 }}
+                transition={{ type: 'spring', stiffness: 360, damping: 24 }}
+                className="absolute left-0 top-0 flex h-16 w-[min(210px,54vw)] items-center justify-center rounded-lg border border-ink/12 bg-white px-4 text-center text-[13px] font-extrabold leading-tight text-espresso shadow-soft focus:outline-none focus:ring-4 focus:ring-blush/40 sm:text-sm"
+              >
+                {rejectText} 😤
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {celebrated && (
+              <motion.div
+                className="absolute inset-x-4 top-32 mx-auto max-w-sm rounded-lg border border-champagne/55 bg-parchment/88 px-5 py-5 text-center shadow-soft backdrop-blur"
+                initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.96 }}
+              >
+                <p className="safe-word text-sm font-extrabold uppercase tracking-[0.14em] text-espresso/62">
+                  accepted
+                </p>
+                <p className="safe-word mt-1 text-base font-extrabold leading-6 text-ink">
+                  {config.celebrationAcceptedText}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>
   );
 }
 
-function Certificate({ onClose }) {
+function PartyBurst() {
+  const items = [
+    { icon: '🎈', left: '10%', delay: 0 },
+    { icon: '🥳', left: '24%', delay: 0.08 },
+    { icon: '🎉', left: '39%', delay: 0.16 },
+    { icon: '✨', left: '56%', delay: 0.04 },
+    { icon: '🎊', left: '72%', delay: 0.2 },
+    { icon: '🎈', left: '86%', delay: 0.12 },
+  ];
+
   return (
-    <motion.div
-      className="fixed inset-0 z-40 grid place-items-center bg-ink/72 px-4 py-8 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Graduation certificate"
-      onClick={onClose}
-    >
-      <motion.div
-        className="certificate-paper relative w-full max-w-3xl rounded-lg border-8 border-double border-ink p-5 shadow-glow sm:p-10"
-        initial={{ opacity: 0, y: 40, scale: 0.92, rotate: -1 }}
-        animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-        exit={{ opacity: 0, y: 30, scale: 0.96 }}
-        transition={{ type: 'spring', stiffness: 160, damping: 18 }}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-3 top-3 rounded-lg bg-ink px-3 py-1.5 text-sm font-extrabold text-parchment shadow-soft focus:outline-none focus:ring-4 focus:ring-champagne/50"
-          aria-label="Close certificate"
+    <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden" aria-hidden="true">
+      {items.map((item) => (
+        <motion.span
+          key={`${item.icon}-${item.left}`}
+          className="absolute bottom-0 text-2xl drop-shadow-sm sm:text-3xl"
+          style={{ left: item.left }}
+          initial={{ opacity: 0, y: 28, scale: 0.75, rotate: -10 }}
+          animate={{
+            opacity: [0, 1, 1, 0],
+            y: [28, -70, -150, -250],
+            scale: [0.75, 1.2, 1.05, 0.95],
+            rotate: [-10, 8, -6, 12],
+          }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.8, delay: item.delay, ease: 'easeOut' }}
         >
-          ×
-        </button>
-        <div className="rounded-lg border border-champagne/80 px-5 py-10 text-center sm:px-10">
-          <p className="text-sm font-extrabold uppercase tracking-[0.2em] text-espresso/70">
-            This certifies that
-          </p>
-          <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-ink sm:text-6xl">
-            {config.certificateTitle}
-          </h2>
-          <p className="mt-8 text-lg font-bold text-espresso/75">Awarded to:</p>
-          <p className="safe-word mt-2 font-display text-4xl font-extrabold text-ink sm:text-5xl">
-            {config.friendName}
-          </p>
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-espresso/82">
-            {config.certificateReason}
-          </p>
-          <p className="mt-8 text-2xl font-extrabold text-ink">
-            Class of {config.graduationYear}
-          </p>
-          <div className="mx-auto mt-8 h-px max-w-sm bg-ink/25" />
-          <p className="mt-4 font-display text-2xl font-extrabold text-ink">
-            Signed: {config.senderName}
-          </p>
-        </div>
-      </motion.div>
-    </motion.div>
+          {item.icon}
+        </motion.span>
+      ))}
+    </div>
   );
 }
 
-function FinalMessage({ fortune, onRevealFortune, onPlayCelebration }) {
+function FinalMessage() {
+  const [hype, setHype] = useState('');
+
+  const generateHype = () => {
+    let next = randomFrom(config.hypeMessages);
+    if (next === hype && config.hypeMessages.length > 1) {
+      next = randomFrom(config.hypeMessages.filter((message) => message !== hype));
+    }
+
+    setHype(next);
+    confetti({
+      particleCount: 42,
+      spread: 52,
+      startVelocity: 24,
+      origin: { y: 0.78 },
+      colors: [config.colors.gold, config.colors.blush, config.colors.mint, '#ffffff'],
+    });
+  };
+
   return (
     <section className="relative z-10 px-4 pb-24 pt-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl text-center">
+      <div className="mx-auto max-w-3xl">
         <motion.div
-          className="glass-panel rounded-lg px-5 py-10 sm:px-10 sm:py-14"
+          className="glass-panel relative overflow-hidden rounded-lg px-6 py-10 text-center shadow-soft sm:px-12 sm:py-12"
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.6 }}
         >
-          <p className="mx-auto max-w-3xl font-display text-3xl font-extrabold leading-tight text-ink sm:text-5xl">
-            {config.finalMessage}
-          </p>
-          <p className="mt-7 text-xl font-extrabold text-espresso/80">
-            {config.finalSignature} 🎓
-          </p>
+          <div className="absolute right-6 top-6 h-14 w-14 rounded-full bg-champagne/45 blur-2xl" />
+          <div className="absolute bottom-5 left-8 h-20 w-20 rounded-full bg-blush/35 blur-3xl" />
 
-          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="relative mx-auto max-w-xl">
+            <p className="mb-3 text-sm font-extrabold uppercase tracking-[0.18em] text-espresso/62">
+              {config.hypeTitle}
+            </p>
+            <h2 className="font-display text-4xl font-extrabold leading-tight text-ink sm:text-5xl">
+              {config.hypePrompt}
+            </h2>
+
             <button
               type="button"
-              onClick={onRevealFortune}
-              className="rounded-lg bg-champagne px-5 py-4 text-base font-extrabold text-ink shadow-soft transition hover:-translate-y-0.5 hover:bg-[#ffe58b] focus:outline-none focus:ring-4 focus:ring-ink/15"
+              onClick={generateHype}
+              className="mt-8 rounded-lg bg-ink px-6 py-4 text-base font-extrabold text-parchment shadow-soft transition hover:-translate-y-0.5 hover:bg-espresso focus:outline-none focus:ring-4 focus:ring-champagne/50"
             >
-              Reveal your graduate fortune 🔮
+              {config.hypeButtonText} ✨
             </button>
-            <button
-              type="button"
-              onClick={onPlayCelebration}
-              className="rounded-lg border border-ink/12 bg-white/70 px-5 py-4 text-base font-extrabold text-ink shadow-soft transition hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-4 focus:ring-blush/35"
-            >
-              Play celebration sound 🎶
-            </button>
-          </div>
 
-          <AnimatePresence mode="wait">
-            {fortune && (
+            <AnimatePresence mode="wait">
               <motion.p
-                key={fortune}
-                className="safe-word mx-auto mt-8 max-w-2xl rounded-lg border border-ink/10 bg-white/58 px-5 py-5 text-lg font-bold leading-8 text-espresso shadow-soft"
+                key={hype || 'hype-placeholder'}
+                className="safe-word mx-auto mt-7 min-h-16 max-w-md rounded-lg border border-champagne/45 bg-white/58 px-5 py-5 text-2xl font-extrabold leading-tight text-ink shadow-soft sm:text-3xl"
                 initial={{ opacity: 0, y: 14, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.96 }}
+                exit={{ opacity: 0, y: -10, scale: 0.96 }}
               >
-                {fortune}
+                {hype || 'Tap for hype 🎉'}
               </motion.p>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
+
+            <p className="safe-word mt-8 text-lg font-extrabold text-espresso/72">
+              {config.finalCongratulations}, {config.friendName} 🎓
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

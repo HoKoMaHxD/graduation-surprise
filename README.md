@@ -11,16 +11,16 @@ Edit `src/config.js` to change:
 - Sender name
 - Personal message
 - Button text
-- Certificate copy
-- Fortune messages
+- Celebration confirmation text
+- Hype generator messages
 - Main colors
 
 The most important placeholders are already set:
 
 ```js
-friendName: 'Graduate',
+friendName: 'Sham',
 graduationYear: '2026',
-senderName: 'Your Friend',
+senderName: 'Your Friendoo',
 ```
 
 ## Install
@@ -66,7 +66,3 @@ This project uses `base: './'` in `vite.config.js`, so the built files work from
 
 1. Run `npm run build`.
 2. Deploy the `dist/` folder with your preferred GitHub Pages workflow.
-
-## Optional Sound File
-
-The app currently creates a small celebration chime in the browser when the sound button is clicked. If you prefer a custom sound effect later, add an audio file to `public/` and update `playCelebration` in `src/App.jsx`.

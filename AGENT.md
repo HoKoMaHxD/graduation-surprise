@@ -38,14 +38,15 @@ Tech requirements:
 - Make the app deployable on GitHub Pages, Netlify, or Vercel
 
 Important placeholders:
-FRIEND_NAME = "Graduate"
+FRIEND_NAME = "Sham"
 GRAD_YEAR = "2026"
-SENDER_NAME = "Your Friend"
+SENDER_NAME = "Your Friendoo"
 
 Page flow:
 
 1. Opening/loading screen:
 Create a short animated intro before the main page appears.
+Make it feel like a soft personal note opening: a dreamy light background, animated envelope, a graduation note sliding out, tiny sparkles, and a simple progress bar.
 
 Use rotating/fading lines like:
 - “Loading celebration…”
@@ -69,16 +70,24 @@ Include:
   “You did it. You survived the deadlines, the exams, the group projects, and everything in between.”
 
 Make the hero section visually impressive.
+Do not include a "Start the celebration" button in the hero. Keep the main celebration trigger in the funny interaction section.
 
 3. Personal message card:
 Create a card that slightly tilts with mouse movement on desktop.
 On mobile, use a gentle floating animation instead.
+On the left side of this section, use this softer note:
+
+“A quick note
+
+I know life changes and people get busy, but this is still a big moment.
+
+I’m happy for you, and this is my little way of saying congratulations :)”
 
 The card should say:
 
-“Over 5 years of friendship, and I’m still so proud of you. Watching you reach this moment makes me genuinely happy. I hope this next chapter brings you success, peace, happiness, and everything you have been working toward. You deserve all of it.”
+“Congrats on graduating! I hope this next chapter brings you success, happiness, peace, and Mate that actually tastes good 🧉.”
 
-Make this part feel sincere and warm.
+Make this part feel sincere, warm, and a little funny.
 
 4. Funny interaction section:
 Add this question:
@@ -88,7 +97,7 @@ Add this question:
 Add two buttons:
 
 Button 1:
-“YES, I am iconic ✨”
+“Start the celebration ✨”
 
 Button 2:
 “No, I refuse 😤”
@@ -108,59 +117,45 @@ Use these funny text options:
 
 Make sure the runaway button works on desktop and mobile.
 
-5. When the user clicks “Yes, you may 🥹”:
-Trigger a big confetti explosion.
+5. When the user clicks “Start the celebration ✨”:
+Trigger a tasteful confetti burst plus extra floating balloons and party emojis that rise inside the interaction area.
 
-Then show a beautiful modal or section with a fake certificate.
+Do not show a fake certificate. Instead, keep the moment light and show a small inline confirmation inside the funny interaction section:
 
-Certificate text:
+“Celebration accepted”
 
-“Certificate of Absolute Greatness”
+“Yaaayy, celebration! 🥳🎉”
 
-“Awarded to: [FRIEND_NAME]”
+6. Mini hype generator ending:
+Remove the graduate fortune, sound feature, and heavy final note. End with a playful mini hype generator.
 
-“For officially surviving college, deadlines, exams, group projects, and suspicious levels of stress.”
+Add a button:
+“Give her more hype ✨”
 
-“Class of [GRAD_YEAR]”
+Each click should show a random short hype message:
+- “Let's GOOO! 🚀”
+- “Time to shine! 🌟”
+- “Pure greatness. 🏆”
+- “Unstoppable. 🔥”
+- “Zero limits. 💯”
+- “Graduate mode: ON. 🎓”
+- “You did THAT. 🥳”
+- “Next level unlocked. 🔓”
+- “Victory looks good. 🏅”
+- “Big graduate energy. 🎓”
+- “Mission complete. ✅”
+- “Degree secured. 🔐”
+- “Too bright to miss. 🌟”
+- “The moment is yours. 🏆”
+- “No limits, just wins. 🚀”
+- “Certified unstoppable. 🔥”
+- “Look who made it. 🥳”
+- “Future looking loud. 💯”
 
-At the bottom:
-“Signed: [SENDER_NAME]”
+After the generator, end simply:
+“Congratulations again, [FRIEND_NAME] 🎓”
 
-Make the certificate look elegant, like black/gold/cream paper with nice borders.
-
-6. Final message after certificate:
-Show a final heartfelt/funny message:
-
-“May your future be bright, your happiness be loud, your peace be protected, and your bank account stop playing games.”
-
-Then add:
-
-“I’m really proud of you. Congratulations again 🎓”
-
-7. Graduate fortune feature:
-Add a small interactive feature with a button:
-
-“Reveal your graduate fortune 🔮”
-
-When clicked, show a random message from this list:
-- “A suspiciously good opportunity is coming your way.”
-- “LinkedIn is not ready for your success.”
-- “Your future self is already proud of you.”
-- “Main character era: officially activated.”
-- “You are about to succeed aggressively.”
-- “Your hard work is about to pay you back.”
-- “Peace, success, and better sleep are loading.”
-
-The fortune should animate in nicely.
-
-8. Optional music/sound:
-Add a small button:
-“Play celebration sound 🎶”
-
-Do not autoplay audio.
-Use a simple celebration sound effect if available, or create a placeholder where I can add an audio file later.
-
-9. Design details:
+7. Design details:
 - Background should feel dreamy and celebratory
 - Use layered gradients
 - Use soft shadows
