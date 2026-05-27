@@ -130,7 +130,7 @@ Do not show a fake certificate. Instead, keep the moment light and show a small 
 Remove the graduate fortune, sound feature, and heavy final note. End with a playful mini hype generator.
 
 Add a button:
-“Give her more hype ✨”
+“More hype please ✨”
 
 Each click should show a random short hype message:
 - “Let's GOOO! 🚀”

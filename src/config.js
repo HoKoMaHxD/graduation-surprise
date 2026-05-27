@@ -18,7 +18,7 @@ export const surpriseConfig = {
   celebrationAcceptedText: 'Yaaayy, celebration! 🥳🎉',
   hypeTitle: 'Mini hype generator',
   hypePrompt: 'One last tiny boost before you go.',
-  hypeButtonText: 'Give her more hype',
+  hypeButtonText: 'More hype please',
   hypeMessages: [
     "Let's GOOO! 🚀",
     'Time to shine! 🌟',
