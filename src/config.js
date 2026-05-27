@@ -16,6 +16,7 @@ export const surpriseConfig = {
 
   // Customize the light celebration confirmation and ending here.
   celebrationAcceptedText: 'Yaaayy, celebration! 🥳🎉',
+  celebrationReplayHint: 'Press it again for extra celebration 🎊',
   hypeTitle: 'Mini hype generator',
   hypePrompt: 'One last tiny boost before you go.',
   hypeButtonText: 'More hype please',

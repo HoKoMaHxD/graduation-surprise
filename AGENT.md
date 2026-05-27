@@ -126,6 +126,9 @@ Do not show a fake certificate. Instead, keep the moment light and show a small 
 
 “Yaaayy, celebration! 🥳🎉”
 
+Add a tiny note under it:
+“Press it again for extra celebration 🎊”
+
 6. Mini hype generator ending:
 Remove the graduate fortune, sound feature, and heavy final note. End with a playful mini hype generator.
 

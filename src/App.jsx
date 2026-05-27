@@ -465,6 +465,9 @@ function CelebrationChoice({ onCelebrate, celebrated, celebrationBurstId }) {
                 <p className="safe-word mt-1 text-base font-extrabold leading-6 text-ink">
                   {config.celebrationAcceptedText}
                 </p>
+                <p className="safe-word mt-3 text-xs font-bold leading-5 text-espresso/60">
+                  {config.celebrationReplayHint}
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
