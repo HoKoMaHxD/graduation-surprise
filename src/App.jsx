@@ -39,7 +39,7 @@ function App() {
     }
   }, [hasEntered]);
 
-  // دالة الدخول وتشغيل الأغنية فوراً
+  // دالة الدخول وتشغيل الأغنية فوراً (تشتغل هنا فقط)
   const handleEnterSite = () => {
     setHasEntered(true);
     if (!audioRef.current) {
@@ -55,11 +55,7 @@ function App() {
     setCelebrated(true);
     setCelebrationBurstId((current) => current + 1);
 
-    // إعادة تشغيل الأغنية من البداية عند طلب حماس إضافي
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch((err) => console.log(err));
-    }
+    // [تم حذف أسطر إعادة تشغيل الصوت من هنا لكي تستمر الأغنية بالعمل دون انقطاع]
 
     confetti({
       particleCount: 150,
