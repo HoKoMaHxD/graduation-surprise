@@ -25,18 +25,42 @@ function randomFrom(items) {
 }
 
 function App() {
-  const [introDone, setIntroDone] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false); // شاشة الدخول السوداء
+  const [introDone, setIntroDone] = useState(false);   // شاشة التحميل (الانترو)
   const [celebrated, setCelebrated] = useState(false);
   const [celebrationBurstId, setCelebrationBurstId] = useState(0);
+  const audioRef = useRef(null);
 
+  // يبدأ مؤقت شاشة التحميل فقط بـعد الضغط على شاشة الدخول
   useEffect(() => {
-    const timer = window.setTimeout(() => setIntroDone(true), 4300);
-    return () => window.clearTimeout(timer);
-  }, []);
+    if (hasEntered) {
+      const timer = window.setTimeout(() => setIntroDone(true), 4300);
+      return () => window.clearTimeout(timer);
+    }
+  }, [hasEntered]);
+
+  // دالة الدخول وتشغيل الأغنية فوراً
+  const handleEnterSite = () => {
+    setHasEntered(true);
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/graduation-song.mp3');
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch((err) => {
+      console.log("عطل في تشغيل الصوت:", err);
+    });
+  };
 
   const celebrate = () => {
     setCelebrated(true);
     setCelebrationBurstId((current) => current + 1);
+
+    // إعادة تشغيل الأغنية من البداية عند طلب حماس إضافي
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((err) => console.log(err));
+    }
+
     confetti({
       particleCount: 150,
       spread: 84,
@@ -63,10 +87,36 @@ function App() {
 
   return (
     <main className="dream-bg relative min-h-screen overflow-hidden text-ink">
-      <AnimatePresence>{!introDone && <IntroScreen />}</AnimatePresence>
+      
+      {/* 1. الشاشة السوداء البدائية للدخول */}
+      <AnimatePresence>
+        {!hasEntered && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#11100d] px-4 text-center"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <motion.button
+              type="button"
+              onClick={handleEnterSite}
+              className="rounded-full border border-white/20 bg-white/10 px-8 py-4 font-display text-xl font-extrabold tracking-wide text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-white hover:text-[#11100d] focus:outline-none"
+              animate={{ scale: [1, 1.03, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              اضغطي هنا للدخول ✨
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 2. شاشة التحميل (تظهر بعد الدخول وتختفي بعد 4.3 ثوانٍ) */}
+      <AnimatePresence>
+        {hasEntered && !introDone && <IntroScreen />}
+      </AnimatePresence>
 
       <FloatingScene />
 
+      {/* 3. محتوى الموقع الرئيسي */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: introDone ? 1 : 0 }}
@@ -109,7 +159,7 @@ function IntroScreen() {
 
       <div className="relative w-full max-w-xl text-center">
         <p className="mb-5 text-xs font-extrabold uppercase tracking-[0.22em] text-espresso/62">
-          "فيه رسالة تخرج صغيرة تنفتح لك...
+          فيه رسالة تخرج صغيرة تنفتح لك...
         </p>
 
         <div className="relative mx-auto mb-8 h-72 w-full max-w-sm">
