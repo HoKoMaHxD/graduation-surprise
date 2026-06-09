@@ -109,7 +109,7 @@ function IntroScreen() {
 
       <div className="relative w-full max-w-xl text-center">
         <p className="mb-5 text-xs font-extrabold uppercase tracking-[0.22em] text-espresso/62">
-          A little graduation note is opening
+          "فيه رسالة تخرج صغيرة تنفتح لك...
         </p>
 
         <div className="relative mx-auto mb-8 h-72 w-full max-w-sm">
@@ -149,7 +149,7 @@ function IntroScreen() {
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           >
-            sealed with hype
+            مختومة بالحماس!
           </motion.div>
         </div>
 
